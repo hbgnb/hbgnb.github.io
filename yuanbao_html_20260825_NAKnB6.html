@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的博客</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --text:#1a1a1a;--text-light:#666;--text-muted:#999;
+  --bg:#fff;--bg-code:#f6f8fa;--border:#eaeaea;
+  --accent:#2563eb;--accent-hover:#1d4ed8;--radius:8px;--max-w:720px;
+}
+[data-theme="dark"]{
+  --text:#e4e4e7;--text-light:#a1a1aa;--text-muted:#71717a;
+  --bg:#0f0f10;--bg-code:#18181b;--border:#27272a;
+  --accent:#60a5fa;--accent-hover:#93bbfc;
+}
+* {transition:background-color .25s ease,color .2s ease,border-color .2s ease}
+html{scroll-behavior:smooth}
+body{font-family:"Georgia","Noto Serif SC","Songti SC",serif;font-size:17px;line-height:1.8;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-hover);text-decoration:underline}
+.container{max-width:var(--max-w);margin:0 auto;padding:0 24px}
+header{border-bottom:1px solid var(--border);padding:32px 0 24px;margin-bottom:48px}
+header .container{display:flex;justify-content:space-between;align-items:baseline}
+header h1{font-size:22px;font-weight:700}
+header h1 a{color:var(--text)}
+header h1 a:hover{text-decoration:none}
+nav{display:flex;gap:20px;align-items:center}
+nav a{color:var(--text-light);font-size:15px;font-family:-apple-system,"PingFang SC",sans-serif}
+nav a:hover{color:var(--text);text-decoration:none}
+#themeToggle{background:none;border:none;cursor:pointer;font-size:18px;padding:0 4px;color:var(--text-light);transition:transform .2s}
+#themeToggle:hover{transform:scale(1.2)}
+footer{border-top:1px solid var(--border);padding:32px 0;margin-top:80px;text-align:center;color:var(--text-muted);font-size:14px;font-family:-apple-system,"PingFang SC",sans-serif}
+.page-title{font-size:28px;font-weight:700;margin-bottom:8px}
+.page-desc{color:var(--text-light);font-size:15px;margin-bottom:40px;font-family:-apple-system,"PingFang SC",sans-serif}
+.post-list{list-style:none}
+.post-item{padding:24px 0;border-bottom:1px solid var(--border)}
+.post-item:last-child{border-bottom:none}
+.post-item h2{font-size:20px;font-weight:600;margin-bottom:6px}
+.post-item h2 a{color:var(--text)}
+.post-item h2 a:hover{color:var(--accent);text-decoration:none}
+.post-meta{color:var(--text-muted);font-size:13px;margin-bottom:8px;font-family:-apple-system,"PingFang SC",sans-serif}
+.post-meta span+span::before{content:" · "}
+.post-excerpt{color:var(--text-light);font-size:15px;line-height:1.6}
+.post-header{margin-bottom:40px}
+.post-header h1{font-size:32px;font-weight:700;line-height:1.3;margin-bottom:12px}
+.post-content h2{font-size:24px;font-weight:600;margin:40px 0 16px}
+.post-content h3{font-size:20px;font-weight:600;margin:32px 0 12px}
+.post-content p{margin-bottom:20px}
+.post-content ul,.post-content ol{margin:0 0 20px 24px}
+.post-content li{margin-bottom:6px}
+.post-content blockquote{border-left:3px solid var(--accent);padding:8px 0 8px 20px;margin:24px 0;color:var(--text-light);background:#f8faff;border-radius:0 var(--radius) var(--radius) 0}
+[data-theme="dark"] .post-content blockquote{background:#18181b}
+.post-content code{font-family:"JetBrains Mono","Fira Code",monospace;font-size:14px;background:var(--bg-code);padding:2px 6px;border-radius:4px}
+.post-content pre{background:var(--bg-code);padding:16px;border-radius:var(--radius);overflow-x:auto;margin-bottom:24px}
+.post-content pre code{background:none;padding:0}
+.post-content img{max-width:100%;border-radius:var(--radius);margin:24px 0}
+.post-content hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+.back-link{display:inline-block;margin-bottom:24px;font-size:14px;font-family:-apple-system,"PingFang SC",sans-serif}
+.about-page h1{font-size:28px;margin-bottom:24px}
+.about-page p{margin-bottom:16px}
+@media(max-width:600px){body{font-size:16px}header{padding:20px 0 16px;margin-bottom:32px}header h1{font-size:18px}nav{gap:14px}.post-header h1{font-size:26px}.page-title{font-size:24px}.container{padding:0 16px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1><a href="#" onclick="navigate('home')">林北的博客</a></h1>
+    <nav>
+      <a href="#" onclick="navigate('home')">文章</a>
+      <a href="#" onclick="navigate('about')">关于</a>
+      <button id="themeToggle" aria-label="切换主题">🌙</button>
+    </nav>
+  </div>
+</header>
+<main class="container" id="app"></main>
+<footer><div class="container">© 2026 林北的博客 · 用 ❤️ 手写</div></footer>
+<script>
+/* ===== 文章数据 ===== */
+const posts=[
+  {slug:"hello-world",title:"你好，世界",date:"2026-08-20",tags:["随笔"],excerpt:"这是我的第一篇博客文章。简单记录一下为什么开始写博客，以及这个博客会写些什么。",
+    content:`<p>你好，世界 👋</p><p>这是我的第一篇博客文章。在这个 AI 生成内容泛滥的时代，我反而更想手写一些东西。</p><h2>为什么写博客</h2><p>写博客对我来说有几个意义：</p><ul><li><strong>整理思路</strong>——能把一件事讲清楚，才是真正理解了</li><li><strong>留下痕迹</strong>——互联网上总该有一小块地方是自己的</li><li><strong>连接人</strong>——也许某篇文章能帮到某个人</li></ul><h2>会写什么</h2><ol><li>技术笔记（前端、Three.js、AI 工具）</li><li>读书摘录和思考</li><li>偶尔的生活碎片</li></ol><blockquote>写作是思考的延伸，而不是思考的替代品。</blockquote><p>就这样，开始吧。</p>`},
+  {slug:"threejs-notes",title:"Three.js 入门笔记：从零到第一个 3D 场景",date:"2026-08-15",tags:["前端","Three.js"],excerpt:"记录我用 Three.js 做第一个 3D 项目的踩坑过程。",
+    content:`<p>最近在折腾 Three.js，从零搭了一个 3D 场景。</p><h2>三大件</h2><pre><code>const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(75,w/h,0.1,1000);
+const renderer=new THREE.WebGLRenderer({antialias:true});</code></pre><h2>加个立方体</h2><pre><code>const geo=new THREE.BoxGeometry(1,1,1);
+const mat=new THREE.MeshLambertMaterial({color:0x00ff00});
+const cube=new THREE.Mesh(geo,mat);
+scene.add(cube);</code></pre><h2>灯光不能忘</h2><pre><code>scene.add(new THREE.AmbientLight(0xffffff,0.5));
+const dirLight=new THREE.DirectionalLight(0xffffff,0.8);
+dirLight.position.set(5,10,5);
+scene.add(dirLight);</code></pre><p>Three.js 的 API 设计很直觉，上手比想象中快。</p>`},
+  {slug:"reading-2026",title:"2026 上半年读书小结",date:"2026-07-30",tags:["读书"],excerpt:"上半年读了 14 本书，挑 3 本最值得推荐的聊聊。",
+    content:`<p>2026 上半年读了 14 本，比预期少，但有几本质量很高。</p><h2>《注意力商人》</h2><p>从报纸时代到 TikTok，人类注意力的商业化历史。核心观点：<strong>如果你不为产品付费，你就是产品。</strong></p><blockquote>每一代新媒体都在用更短的时间尺度争夺你的注意力。</blockquote><h2>《系统之美》</h2><p>系统思维的入门书。学会区分"存量"和"流量"，看问题会多一个维度。</p><h2>《太白金星有点烦》</h2><p>马伯庸的，用现代职场视角重写西游。笑死。</p><hr><p>下半年目标：少刷短视频，多读长书。📚</p>`},
+  {slug:"ai-tools-2026",title:"我现在的 AI 工具箱（2026 版）",date:"2026-07-10",tags:["工具","AI"],excerpt:"盘点我每天在用的 AI 工具，以及各自的使用场景。",
+    content:`<p>AI 工具迭代太快了，每半年重新整理一次。</p><h2>写代码</h2><ul><li><strong>Cursor</strong>——主力编辑器</li><li><strong>元宝</strong>——中文对话+长上下文</li></ul><h2>写文章</h2><ul><li><strong>Notion AI</strong>——整理草稿</li><li><strong>元宝</strong>——头脑风暴选题</li></ul><p>工具不在多，在于<strong>融入工作流</strong>。</p>`}
+];
+
+/* ===== 渲染 ===== */
+function renderHome(){document.getElementById('app').innerHTML=`<h1 class="page-title">文章</h1><p class="page-desc">记录一些想法、笔记和碎片。</p><ul class="post-list">${posts.map(p=>`<li class="post-item"><h2><a href="#" onclick="navigate('post','${p.slug}')">${p.title}</a></h2><div class="post-meta"><span>${p.date}</span><span>${p.tags.join(', ')}</span></div><p class="post-excerpt">${p.excerpt}</p></li>`).join('')}</ul>`;}
+function renderPost(slug){const p=posts.find(x=>x.slug===slug);if(!p){document.getElementById('app').innerHTML='<h1>没找到</h1><p><a href="#" onclick="navigate(\'home\')">← 回首页</a></p>';return;}document.title=p.title+' - 林北的博客';document.getElementById('app').innerHTML=`<a href="#" class="back-link" onclick="navigate('home')">← 返回文章列表</a><article class="post-header"><h1>${p.title}</h1><div class="post-meta"><span>${p.date}</span><span>${p.tags.join(', ')}</span></div></article><div class="post-content">${p.content}</div>`;window.scrollTo(0,0);}
+function renderAbout(){document.title="关于 - 林北的博客";document.getElementById('app').innerHTML=`<div class="about-page"><h1>关于</h1><p>你好，我是林北。一个写代码也写文字的人。</p><p>这个博客用来记录技术笔记、读书思考和一些生活碎片。不追热点，不写标题党。</p><h2 style="margin-top:32px;font-size:20px;">联系方式</h2><p>GitHub：<a href="#">@linbei</a></p><p>邮箱：<a href="mailto:hello@example.com">hello@example.com</a></p></div>`;window.scrollTo(0,0);}
+function navigate(page,slug){window.scrollTo(0,0);page==='home'?renderHome():page==='post'?renderPost(slug):renderAbout();}
+
+/* ===== 暗色模式 ===== */
+const toggle=document.getElementById('themeToggle');
+const stored=localStorage.getItem('theme');
+const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+if(stored==='dark'||(!stored&&prefersDark)){document.documentElement.setAttribute('data-theme','dark');toggle.textContent='☀️';}
+toggle.addEventListener('click',()=>{const isDark=document.documentElement.getAttribute('data-theme')==='dark';if(isDark){document.documentElement.removeAttribute('data-theme');localStorage.setItem('theme','light');toggle.textContent='🌙';}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('theme','dark');toggle.textContent='☀️';}});
+
+renderHome();
+</script>
+</body>
+</html>
